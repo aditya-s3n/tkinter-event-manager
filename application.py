@@ -12,6 +12,14 @@ def change_price():
 def age_text_change():
     pass
 
+def open_participant(value):
+    print(str(value))
+
+#change the title to react to the resort option menu
+def change_title_text(resort_name):
+    title_variable.set(f"Welcome to the {resort_name} Resort!")
+
+
 """____Database____"""
 #create connection to database server (to CRUD the database)
 def connect_to_server():
@@ -47,6 +55,7 @@ def create_database_users():
     #end the server connections
     end_connection_server(connect)
 
+
 #insert a partipant into the SQL database
 def enter_particpant(id: int, first_name: str, last_name: str, meal_plan: str, events: int, age: int, price: int):
     #create connection and editor
@@ -78,6 +87,23 @@ def update_particpant_data(id: int, first_name: str, last_name: str, meal_plan: 
 
     #end connection to database
     end_connection_server(connect)
+
+
+#Delete a paricipant
+def delete_participant_by_id(id: int):
+    #create connection and editor
+    connect = connect_to_server()
+    cursor = connect.cursor()
+
+    #delete participant Info
+    command = """\
+        DELETE FROM users
+        WHERE id=?"""
+    cursor.execute(command, (id))
+
+    #end connection to database
+    end_connection_server(connect)
+
 
 #get values by id 
 def get_participant_by_id(id: int):
@@ -149,13 +175,41 @@ age_label = Label(root, font=("Arial Rounded MT Bold", 24), textvariable=age_lab
 age_text_change()
 
 #Paricpants List Box
+list_box_array = ["Use", "this", "participant"]
+list_box_variable = StringVar()
+list_box_variable.set(list_box_array)
+participant_listbox = Listbox(root, listvariable=list_box_variable, selectmode=SINGLE)
+#Participant Label
+participant_label = Label(text="Participants")
 
 #Submit Button
 sumbit_button = Button(root, text="Sumbit", command=add_paricipant)
 
-#Event Name Option Menu
+#Price for Participant
+subtotal_variable = StringVar()
+tax_variable = StringVar()
+total_price_variable = StringVar()
+subtotal_variable.set("Subtati")
+tax_variable.set('tax')
+total_price_variable.set("adls")
+subtotal_label = Label(root, textvariable=subtotal_variable)
+tax_label = Label(root, textvariable=tax_variable)
+total_price_label = Label(root, textvariable=total_price_variable)
+
+#Resort Name Option Menu
+resorts = ["Hawaii", "Greece", "Chile", "Thailand"]
+resort_selection = StringVar()
+resort_selection.set("Hawaii")
+resort_option_menu = OptionMenu(root, resort_selection, *resorts, command=change_title_text)
 
 #Title
+title_variable = StringVar()
+change_title_text(resort_selection.get())
+title_label = Label(textvariable=title_variable, font=font_body)
+#Open spots
+open_spots_variable = StringVar()
+open_spots_variable.set("There are 10 spots open")
+open_spots_label = Label(textvariable=open_spots_variable, font=font_body)
 
 """____Grid Widgets____"""
 #First Name Text Entry
@@ -184,14 +238,27 @@ age_label.grid(column=0, row=9)
 age_scale.grid(column=0, row=10)
 
 #Paricpants List Box
+participant_label.grid(column=1, row=3)
+participant_listbox.grid(column=1, row=4)
 
 #Submit Button
+sumbit_button.grid(column=1, row=8)
 
-#Event Name Option Menu
+#Price for Participant
+subtotal_label.grid(column=1, row=5)
+tax_label.grid(column=1, row=6)
+total_price_label.grid(column=1, row=7)
+
+#Resort Name Option Menu
+resort_option_menu.grid(row=0, column=0)
 
 #Title
+title_label.grid(column=0, row=1)
+open_spots_label.grid(column=0, row=2)
 
 
+"""---------------------------------- Run + Binds ----------------------------------"""
+#listbox
+participant_listbox.bind("<Double-Button>", open_participant)
 
-"""---------------------------------- Run ----------------------------------"""
 root.mainloop()
