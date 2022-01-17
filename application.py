@@ -1,6 +1,5 @@
-from distutils import command
 from tkinter import * #tkinter package
-import sqlite3  #sql database package
+import sqlite3
 
 """---------------------------------- App Functionality ----------------------------------"""
 """____Commands + Tkinter Functions____"""
@@ -58,7 +57,7 @@ def enter_particpant(id: int, first_name: str, last_name: str, meal_plan: str, e
     command = """\
         INSERT INTO users
         VALUES (?, ?, ?, ?, ?, ?, ?)"""
-    cursor.execute(command, (id, first_name, last_name, meal_plan, events, age, price))
+    cursor.execute(command, (id, first_name, last_name, meal_plan, events, age, price)) #give values to the ? in the command
 
     #end connection to the server instance
     end_connection_server(connect)
@@ -75,7 +74,7 @@ def update_particpant_data(id: int, first_name: str, last_name: str, meal_plan: 
         UPDATE users
         SET first_name=?, last_name=?, meal_plan=?, events=?, age=?, price=?
         WHERE id=?"""
-    cursor.execute(command, (first_name, last_name, meal_plan, events, age, price, id))
+    cursor.execute(command, (first_name, last_name, meal_plan, events, age, price, id)) #give values to the ? in the command
 
     #end connection to database
     end_connection_server(connect)
@@ -92,7 +91,7 @@ def get_participant_by_id(id: int):
         FROM users
         WHERE id=?"""
     #get the parictipant with the ID
-    participant = cursor.execute(command, (id)).fetchone()
+    participant = cursor.execute(command, (id)).fetchone() #give values to the ? in the command & fetch the one value / row
 
     #end connection to the server instance & return
     end_connection_server(connect)
@@ -100,14 +99,18 @@ def get_participant_by_id(id: int):
 
 """---------------------------------- Tkinter Front-End ----------------------------------"""
 root = Tk()
+place_names = ["Hawaii", ""]
 events = ["Snorkling", "A", "B"]
+
+font_title = ("Bauhaus 93", 30)
+font_body = ("Arial Rounded MT Bold", 24)
 
 """____Make Widgets____"""
 #First Name Text Entry
 first_name = StringVar()
 first_name_entry = Entry(root, textvariable=first_name)
 #First Name Label
-first_name_label = Label(root, font=("Arial Rounded MT Bold", 24), text="First Name: ")
+first_name_label = Label(root, font=font_body, text="First Name: ")
 
 #Last Name Text Entry
 last_name = StringVar()
@@ -121,10 +124,10 @@ meal_plan.set("Deluxe") #set the default radio button selection to deluxe
 #Meal Plan Label Frame
 meal_plan_label = LabelFrame(root, text="Choose a Meal Plan")
 #Radio Buttons
-meal_plan_deluxe = Radiobutton(root, text="Deluxe", variable=meal_plan, value="Deluxe", command=change_price)
-meal_plan_premium = Radiobutton(root, text="Premium", variable=meal_plan, value="Premium", command=change_price)
-meal_plan_business = Radiobutton(root, text="Business", variable=meal_plan, value="Business", command=change_price)
-meal_plan_economy = Radiobutton(root, text="Economy", variable=meal_plan, value="Economy", command=change_price)
+meal_plan_deluxe = Radiobutton(meal_plan_label, text="Deluxe", variable=meal_plan, value="Deluxe", command=change_price)
+meal_plan_premium = Radiobutton(meal_plan_label, text="Premium", variable=meal_plan, value="Premium", command=change_price)
+meal_plan_business = Radiobutton(meal_plan_label, text="Business", variable=meal_plan, value="Business", command=change_price)
+meal_plan_economy = Radiobutton(meal_plan_label, text="Economy", variable=meal_plan, value="Economy", command=change_price)
 
 #Events Check Buttons
 event1 = IntVar()
@@ -133,9 +136,9 @@ event3 = IntVar()
 #Event Label Frame
 event_label = LabelFrame(root, text="Choose What Event's to Apply To")
 #Check Buttons
-event1_check_button = Checkbutton(root, variable=event1, text=events[0], onvalue=2, offvalue=0)
-event2_check_button = Checkbutton(root, variable=event2, text=events[1], onvalue=2, offvalue=0)
-event3_check_button = Checkbutton(root, variable=event3, text=events[2], onvalue=2, offvalue=0)
+event1_check_button = Checkbutton(event_label, variable=event1, text=events[0], onvalue=2, offvalue=0)
+event2_check_button = Checkbutton(event_label, variable=event2, text=events[1], onvalue=2, offvalue=0)
+event3_check_button = Checkbutton(event_label, variable=event3, text=events[2], onvalue=2, offvalue=0)
 
 #Age Scale
 age_value = IntVar()
@@ -156,14 +159,29 @@ sumbit_button = Button(root, text="Sumbit", command=add_paricipant)
 
 """____Grid Widgets____"""
 #First Name Text Entry
+first_name_label.grid(column=0, row=3)
+first_name_entry.grid(column=0, row=4)
 
 #Last Name Text Entry
+last_name_label.grid(column=0, row=5)
+last_name_entry.grid(column=0, row=6)
 
 #Meal Plan Radio Buttons
+meal_plan_label.grid(column=0, row=7, ipadx = 10, ipady = 10) #label frame
+meal_plan_deluxe.grid(sticky=W, padx=10)
+meal_plan_premium.grid(sticky=W, padx=10)
+meal_plan_business.grid(sticky=W, padx=10)
+meal_plan_economy.grid(sticky=W, padx=10)
 
 #Events Check Buttons
+event_label.grid(column=0, row=8, ipadx = 10, ipady = 10)
+event1_check_button.grid(sticky=W, padx=10)
+event2_check_button.grid(sticky=W, padx=10)
+event3_check_button.grid(sticky=W, padx=10)
 
 #Age Scale
+age_label.grid(column=0, row=9)
+age_scale.grid(column=0, row=10)
 
 #Paricpants List Box
 
