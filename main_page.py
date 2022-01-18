@@ -115,8 +115,32 @@ def price_text_change():
 
     return total_price
 
+#update the list box with all the pariticpants
+def update_list_box(resort_name: str) -> None:
+    #Get all the participants in the resort
+    participants = get_participant_by_resort(resort_name)
+
+    list_box_array = [] #empty the array 
+    #add all the participants to the existing list
+    for user in participants:
+        new_participant = f"{user[0]} {user[1]} {user[2]}"
+        list_box_array.append(new_participant)
+
+    #set the list to the list box variable
+    list_box_variable.set(list_box_array) 
+
 def open_participant(value):
+    """____Info Page Functionaility____"""
+    #get the index / component user is on
+    user_index = participant_listbox.curselection()[0]
+    #get the string and ID of the participant
+    #create list of user's details 
+
+
+    #delete the participant's profile
+    #save and update the participant's profile
     """____Info Page Widgets____"""
+    
     #window for new page
     info_window = Toplevel(root)
 
@@ -194,6 +218,7 @@ def change_title_text(resort_name):
     title_variable.set(f"Welcome to the {resort_name} Resort!")
     change_spots_label(resort_name)
     price_text_change()
+    update_list_box(resort_name)
 
 def change_spots_label(resort_name):
     spots_total = get_spots_of_resort(resort_name)
