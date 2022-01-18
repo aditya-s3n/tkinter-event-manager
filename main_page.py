@@ -12,20 +12,47 @@ def add_paricipant():
     fname = first_name.get()
     #get and save last name
     lname = last_name.get()
+    #check the spots avaiable
+    resort_selected = resort_selection.get()
+    spots_total = get_spots_of_resort(resort_selected)
+    participants = get_participant_by_resort(resort_selected)
 
     #Check if either last name, first name are empty, or age is 0
-    if len(fname) == 0 or len(lname) == 0 or age <= 0:
+    if len(fname) == 0 or len(lname) == 0 or age <= 0 or spots_total[0] <= len(participants):
         #show warning to check for first name, last name, or age
-        showwarning("Error: Insufficient Information", """\
+        showwarning("Error: Insufficient Information OR No Available Space", """\
 One (or more) of these is causing a problem submitting the client's information:
     1. First Name Entry is Empty
     2. Last Name Entry is Empty
     3. Age is set to 0
+    4. All the spots are filled up
         """)
     
     #sumbit and save the participant's information
     else:
-        pass
+        #get all the values of the user
+        #meal plan
+        meal_plan_selected = meal_plan.get()
+        #events
+        events_selected = event1.get() + event2.get() + event3.get()
+        #price
+        total_price = price_text_change()
+        total_price_formatted = "{:0,.2f}".format(total_price) #formatted text
+
+        #show a message asking if you wanna save this information
+        result = askquestion("Save Data?", f"""\
+Do you wanna Save this Information at the {resort_selected} Resort:
+    First Name: {fname}
+    Last Name: {lname}
+    Meal Plan: {meal_plan_selected}
+    Number of Events Selected: {events_selected}
+
+    Price: ${total_price_formatted}
+            """)
+        
+        if result == "yes":
+            #enter into SQL database
+            enter_particpant(fname, lname, meal_plan_selected, events_selected, age, total_price, resort_selected)
 
 #change age label
 def age_text_change(value):
@@ -86,6 +113,8 @@ def price_text_change():
     #set tax price label
     total_price_variable.set(f"TOTAL: ${total_price_formatted}")
 
+    return total_price
+
 def open_participant(value):
     """____Info Page Widgets____"""
     #window for new page
@@ -122,7 +151,7 @@ def open_participant(value):
     event2_info = IntVar()
     event3_info = IntVar()
     #Event Label Frame
-    event_label_info = LabelFrame(root, text="Choose What Event's to Apply To")
+    event_label_info = LabelFrame(info_window, text="Choose What Event's to Apply To")
     #Check Buttons
     event1_check_button_info = Checkbutton(event_label_info, variable=event1_info, text=events[0], onvalue=1, offvalue=0)
     event2_check_button_info = Checkbutton(event_label_info, variable=event2_info, text=events[1], onvalue=1, offvalue=0)
@@ -163,13 +192,20 @@ def open_participant(value):
 #change the title to react to the resort option menu
 def change_title_text(resort_name):
     title_variable.set(f"Welcome to the {resort_name} Resort!")
+    change_spots_label(resort_name)
     price_text_change()
+
+def change_spots_label(resort_name):
+    spots_total = get_spots_of_resort(resort_name)
+    participants = get_participant_by_resort(resort_name)
+
+    open_spots_variable.set(f"There are {spots_total[0] - len(participants)} spots open")
 
 
 """____Database____"""
 #create connection to database server (to CRUD the database)
 def connect_to_server():
-    return sqlite3.connect('/participants.db')
+    return sqlite3.connect('participants.db')
 
 #end the connection to the server when changes are made 
 def end_connection_server(connection):
@@ -192,6 +228,9 @@ def enter_particpant(first_name: str, last_name: str, meal_plan: str, events: in
     #end connection to the server instance
     end_connection_server(connect)
 
+    #Show Successful message for User
+    showinfo("Successful Added Participant", f"The Participant {first_name} {last_name} has been successfully added to the database")
+    change_title_text(resort)
 
 #update a participants data in the SQL database
 def update_particpant_data(id: int, first_name: str, last_name: str, meal_plan: str, events: int, age: int, price: int, resort: str):
@@ -227,23 +266,41 @@ def delete_participant_by_id(id: int):
 
 
 #get values by id 
-def get_participant_by_id(id: int):
+def get_participant_by_resort(resort: str) -> list:
     #create connection and editor
     connect = connect_to_server()
     cursor = connect.cursor()
 
-    #Select Statement
+    #Select Statement to see participants at a certain resort
     command = """\
         SELECT *
         FROM users
-        WHERE id=?"""
-    #get the parictipant with the ID
-    participant = cursor.execute(command, (id)).fetchone() #give values to the ? in the command & fetch the one value / row
+        WHERE resort=?"""
+    #gets a list of all the partipants
+    list_of_participant = cursor.execute(command, (resort,)).fetchall() #give values to the ? in the command & feteches a list of particpants
 
     #end connection to the server instance & return
     end_connection_server(connect)
-    return participant
+    return list_of_participant
 
+
+#get the total spots of the resort
+def get_spots_of_resort(resort_name: str) -> int:
+    #create connection and editor
+    connect = connect_to_server()
+    cursor = connect.cursor()
+
+    #Select Statement to get the spots by the name
+    command = """\
+        SELECT (spots)
+        FROM resorts
+        WHERE name=?"""
+    #get the get the value of spots
+    spots_avaliable = cursor.execute(command, (resort_name,)).fetchone() #give values to the ? in the command & fetch the one value / row
+
+    #end connection to the server instance & return
+    end_connection_server(connect)
+    return spots_avaliable
 
 """---------------------------------- Tkinter Front-End ----------------------------------"""
 root = Tk()
@@ -312,7 +369,6 @@ title_variable = StringVar()
 title_label = Label(textvariable=title_variable, font=font_body)
 #Open spots
 open_spots_variable = StringVar()
-open_spots_variable.set("There are 10 spots open")
 open_spots_label = Label(textvariable=open_spots_variable, font=font_body)
 
 #Resort Name Option Menu
