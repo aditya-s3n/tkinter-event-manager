@@ -136,9 +136,14 @@ def open_participant(value):
     #get the string and ID of the participant
     #create list of user's details 
 
-
     #delete the participant's profile
     #save and update the participant's profile
+
+    #change age info label
+    def change_age_info_label(value):
+        age_label_variable_info.set(f"Age: {value}")
+
+
     """____Info Page Widgets____"""
     
     #window for new page
@@ -181,11 +186,19 @@ def open_participant(value):
     event2_check_button_info = Checkbutton(event_label_info, variable=event2_info, text=events[1], onvalue=1, offvalue=0)
     event3_check_button_info = Checkbutton(event_label_info, variable=event3_info, text=events[2], onvalue=1, offvalue=0)
     
-    #Age
+    #Age Scale
+    age_value_info = IntVar()
+    age_scale_info = Scale(info_window, from_=0, to=150, variable=age_value_info, width=20, length=100, command=change_age_info_label, orient=HORIZONTAL)
+    #Age Label
+    age_label_variable_info = StringVar()
+    age_label_info = Label(info_window, font=("Arial Rounded MT Bold", 24), textvariable=age_label_variable_info)
 
     #Save 
+    save_button_info = Button(info_window, text="Save")
 
     #Delete
+    delete_button_info = Button(info_window, text="Delete")
+
 
     """____Grid Widgets____"""
     #Title
@@ -207,12 +220,23 @@ def open_participant(value):
     meal_plan_economy_info.grid(sticky=W, padx=10)
 
     #Events Check Buttons
-    event_label_info.grid(column=0, row=8, ipadx = 10, ipady = 10)
+    event_label_info.grid(column=0, row=8, ipadx = 10, ipady = 10, columnspan=2)
     event1_check_button_info.grid(sticky=W, padx=10)
     event2_check_button_info.grid(sticky=W, padx=10)
     event3_check_button_info.grid(sticky=W, padx=10)
-    
 
+    #Age Scale
+    age_label_info.grid(column=0, row=9, columnspan=2)
+    age_scale_info.grid(column=0, row=10, columnspan=2)
+
+    #Save Button
+    save_button_info.grid(column=0, row=11, sticky=W, columnspan=2)
+
+    #Delete Button
+    delete_button_info.grid(column=0, row=11, sticky=E, columnspan=2)
+
+    change_age_info_label(age_value_info.get())
+    
 #change the title to react to the resort option menu
 def change_title_text(resort_name):
     title_variable.set(f"Welcome to the {resort_name} Resort!")
