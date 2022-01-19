@@ -1,3 +1,4 @@
+from distutils import command
 from tkinter import * #tkinter package
 from tkinter.messagebox import * #warning & info message / pop-up
 import sqlite3 #SQL database connection
@@ -45,7 +46,7 @@ Do you wanna Save this Information at the {resort_selected} Resort:
     First Name: {fname}
     Last Name: {lname}
     Meal Plan: {meal_plan_selected}
-    Number of Events Selected: {events_selected}
+    Number of Events Selected: {int(events_selected)}
 
     Price: ${total_price_formatted}
             """)
@@ -116,7 +117,8 @@ def price_text_change():
     return total_price
 
 #update the list box with all the pariticpants
-def update_list_box(resort_name: str) -> None:
+def update_list_box(resort_name: str):
+    global list_box_array
     #Get all the participants in the resort
     participants = get_participant_by_resort(resort_name)
 
@@ -134,10 +136,59 @@ def open_participant(value):
     #get the index / component user is on
     user_index = participant_listbox.curselection()[0]
     #get the string and ID of the participant
-    #create list of user's details 
+    user_string = list_box_array[user_index]
+    #create list of user's details
+    participant_details = get_participant_by_id(user_string.split()[0]) #gets the id from the user's string, split it to get the id by itself
+    
+    previous_resort = participant_details[0][7] #used to refresh when changed
+
+    #set all the widget components to the participant's details
+    def update_info_widgets():
+        #set the first name and last name entries
+        first_name_entry_info.insert(0, participant_details[0][1])
+        last_name_entry_info.insert(0, participant_details[0][2])
+        #set the meal plan radio button
+        meal_plan_info.set(participant_details[0][3])
+        #set the events check buttons
+        events_selected = participant_details[0][4]
+        print(events_selected)
+        if events_selected == 1: #Snorkling selected
+            event1_info.set(1)
+        elif events_selected == 1.1: #Massage selected
+            event2_info.set(1.1) 
+        elif events_selected == 1.11: #fireworks / lightshow selected
+            event3_info.set(1.11) 
+        elif events_selected == 2.1: #snorkling & massage selected
+            event1_info.set(1) 
+            event2_info.set(1.1) 
+        elif events_selected == 2.11: #snorkling & fireworks selected
+            event1_info.set(1)
+            event3_info.set(1.11)  
+        elif events_selected == 2.21: #fireworks & snorkling selected
+            event2_info.set(1.1) 
+            event3_info.set(1.11) 
+        elif events_selected == 3.21: #all selected
+            event1_check_button_info.select()
+
+
+        #Set the age for the radio button
+        age_label_variable_info.set(f"Age: {participant_details[0][5]}")
+        age_value_info.set(participant_details[0][5])
+        #Set the option menu to the user's
+        resort_selection_info.set(participant_details[0][7])
+
 
     #delete the participant's profile
+    def delete_profile():
+        delete_participant_by_id(participant_details[0][0]) #call delete function
+        info_window.destroy() #exit the window
+        change_title_text(participant_details[0][7]) #refresh main page
+
     #save and update the participant's profile
+    def save_participant_detail():
+        update_particpant_data(participant_details[0][0], first_name_info.get(), last_name_info.get(), meal_plan_info.get(), (event1.get() + event2.get() + event3.get()), age_value_info.get(), price_text_change(), resort_selection_info.get())
+        #refresh main screen
+        change_title_text(previous_resort)
 
     #change age info label
     def change_age_info_label(value):
@@ -145,7 +196,6 @@ def open_participant(value):
 
 
     """____Info Page Widgets____"""
-    
     #window for new page
     info_window = Toplevel(root)
 
@@ -166,7 +216,6 @@ def open_participant(value):
 
     #Meal Plan Radio Buttons
     meal_plan_info = StringVar()
-    meal_plan_info.set("Deluxe") #set the default radio button selection to deluxe
     #Meal Plan Label Frame
     meal_plan_label_info = LabelFrame(info_window, text="Choose a Meal Plan")
     #Radio Buttons
@@ -176,15 +225,15 @@ def open_participant(value):
     meal_plan_economy_info = Radiobutton(meal_plan_label_info, text="Economy", variable=meal_plan_info, value="Economy", command=price_text_change)
 
     #Events Check Buttons
-    event1_info = IntVar()
-    event2_info = IntVar()
-    event3_info = IntVar()
+    event1_info = DoubleVar()
+    event2_info = DoubleVar()
+    event3_info = DoubleVar()
     #Event Label Frame
     event_label_info = LabelFrame(info_window, text="Choose What Event's to Apply To")
     #Check Buttons
     event1_check_button_info = Checkbutton(event_label_info, variable=event1_info, text=events[0], onvalue=1, offvalue=0)
-    event2_check_button_info = Checkbutton(event_label_info, variable=event2_info, text=events[1], onvalue=1, offvalue=0)
-    event3_check_button_info = Checkbutton(event_label_info, variable=event3_info, text=events[2], onvalue=1, offvalue=0)
+    event2_check_button_info = Checkbutton(event_label_info, variable=event2_info, text=events[1], onvalue=1.1, offvalue=0)
+    event3_check_button_info = Checkbutton(event_label_info, variable=event3_info, text=events[2], onvalue=1.11, offvalue=0)
     
     #Age Scale
     age_value_info = IntVar()
@@ -194,10 +243,17 @@ def open_participant(value):
     age_label_info = Label(info_window, font=("Arial Rounded MT Bold", 24), textvariable=age_label_variable_info)
 
     #Save 
-    save_button_info = Button(info_window, text="Save")
+    save_button_info = Button(info_window, text="Save", command=save_participant_detail)
 
     #Delete
-    delete_button_info = Button(info_window, text="Delete")
+    delete_button_info = Button(info_window, text="Delete", command=delete_profile)
+
+    #Option Menu
+    resort_selection_info = StringVar()
+    resort_option_menu_info = OptionMenu(info_window, resort_selection_info, *resorts)
+
+    #set all values
+    update_info_widgets()
 
 
     """____Grid Widgets____"""
@@ -234,6 +290,9 @@ def open_participant(value):
 
     #Delete Button
     delete_button_info.grid(column=0, row=11, sticky=E, columnspan=2)
+
+    #Resort Name Option Menu
+    resort_option_menu_info.grid(row=0, column=0, columnspan=2)
 
     change_age_info_label(age_value_info.get())
     
@@ -308,7 +367,7 @@ def delete_participant_by_id(id: int):
     command = """\
         DELETE FROM users
         WHERE id=?"""
-    cursor.execute(command, (id))
+    cursor.execute(command, (id,))
 
     #end connection to database
     end_connection_server(connect)
@@ -327,6 +386,25 @@ def get_participant_by_resort(resort: str) -> list:
         WHERE resort=?"""
     #gets a list of all the partipants
     list_of_participant = cursor.execute(command, (resort,)).fetchall() #give values to the ? in the command & feteches a list of particpants
+
+    #end connection to the server instance & return
+    end_connection_server(connect)
+    return list_of_participant
+
+
+#get the details of participant by id
+def get_participant_by_id(id: int) -> list:
+    #create connection and editor
+    connect = connect_to_server()
+    cursor = connect.cursor()
+
+    #select statement to see participants by id
+    command = """\
+        SELECT *
+        FROM users
+        WHERE id=?"""
+    #get the list of all the participants
+    list_of_participant = cursor.execute(command, (id,)).fetchall() #give values to the ? in the command & feteches a list of particpants
 
     #end connection to the server instance & return
     end_connection_server(connect)
@@ -353,7 +431,6 @@ def get_spots_of_resort(resort_name: str) -> int:
 
 """---------------------------------- Tkinter Front-End ----------------------------------"""
 root = Tk()
-place_names = ["Hawaii", ""]
 events = ["Snorkling", "Massage", "Fireworks / Lightshow"]
 
 font_title = ("Bauhaus 93", 30)
@@ -384,15 +461,15 @@ meal_plan_business = Radiobutton(meal_plan_label, text="Business", variable=meal
 meal_plan_economy = Radiobutton(meal_plan_label, text="Economy", variable=meal_plan, value="Economy", command=price_text_change)
 
 #Events Check Buttons
-event1 = IntVar()
-event2 = IntVar()
-event3 = IntVar()
+event1 = DoubleVar()
+event2 = DoubleVar()
+event3 = DoubleVar()
 #Event Label Frame
 event_label = LabelFrame(root, text="Choose What Event's to Apply To")
 #Check Buttons
 event1_check_button = Checkbutton(event_label, variable=event1, text=events[0], onvalue=1, offvalue=0, command=price_text_change)
-event2_check_button = Checkbutton(event_label, variable=event2, text=events[1], onvalue=1, offvalue=0, command=price_text_change)
-event3_check_button = Checkbutton(event_label, variable=event3, text=events[2], onvalue=1, offvalue=0, command=price_text_change)
+event2_check_button = Checkbutton(event_label, variable=event2, text=events[1], onvalue=1.1, offvalue=0, command=price_text_change)
+event3_check_button = Checkbutton(event_label, variable=event3, text=events[2], onvalue=1.11, offvalue=0, command=price_text_change)
 
 #Price for Participant
 subtotal_variable = StringVar()
