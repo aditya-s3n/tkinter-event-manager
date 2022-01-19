@@ -152,7 +152,7 @@ def open_participant(value):
         #set the events check buttons
         events_selected = participant_details[0][4]
         events_selected = "{:.2f}".format(events_selected)
-        print(events_selected)
+        events_selected = float(events_selected)
         if events_selected == 1: #Snorkling selected
             event1_check_button_info.select()
         elif events_selected == 1.1: #Massage selected
@@ -216,6 +216,8 @@ def open_participant(value):
             update_particpant_data(participant_details[0][0], first_name_info.get(), last_name_info.get(), meal_plan_info.get(), (event1_info.get() + event2_info.get() + event3_info.get()), age_value_info.get(), price_text_change(), resort_selection_info.get())
             #refresh main screen
             change_title_text(previous_resort)
+            #exit info window
+            info_window.destroy()
 
     #change age info label
     def change_age_info_label(value):
