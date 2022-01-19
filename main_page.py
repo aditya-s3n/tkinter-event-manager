@@ -151,24 +151,27 @@ def open_participant(value):
         meal_plan_info.set(participant_details[0][3])
         #set the events check buttons
         events_selected = participant_details[0][4]
+        events_selected = "{:.2f}".format(events_selected)
         print(events_selected)
         if events_selected == 1: #Snorkling selected
-            event1_info.set(1)
+            event1_check_button_info.select()
         elif events_selected == 1.1: #Massage selected
-            event2_info.set(1.1) 
+            event2_check_button_info.select()
         elif events_selected == 1.11: #fireworks / lightshow selected
-            event3_info.set(1.11) 
+            event3_check_button_info.select() 
         elif events_selected == 2.1: #snorkling & massage selected
-            event1_info.set(1) 
-            event2_info.set(1.1) 
+            event1_check_button_info.select() 
+            event2_check_button_info.select()
         elif events_selected == 2.11: #snorkling & fireworks selected
-            event1_info.set(1)
-            event3_info.set(1.11)  
+            event1_check_button_info.select()
+            event3_check_button_info.select()
         elif events_selected == 2.21: #fireworks & snorkling selected
-            event2_info.set(1.1) 
-            event3_info.set(1.11) 
+            event2_check_button_info.select()
+            event3_check_button_info.select()
         elif events_selected == 3.21: #all selected
             event1_check_button_info.select()
+            event2_check_button_info.select()
+            event3_check_button_info.select()
 
 
         #Set the age for the radio button
@@ -186,9 +189,33 @@ def open_participant(value):
 
     #save and update the participant's profile
     def save_participant_detail():
-        update_particpant_data(participant_details[0][0], first_name_info.get(), last_name_info.get(), meal_plan_info.get(), (event1.get() + event2.get() + event3.get()), age_value_info.get(), price_text_change(), resort_selection_info.get())
-        #refresh main screen
-        change_title_text(previous_resort)
+        #Check age & set it to variable
+        age = age_value_info.get()
+        #get and save first 
+        fname = first_name_info.get()
+        #get and save last name
+        lname = last_name_info.get()
+        #check the spots avaiable
+        resort_selected = resort_selection_info.get()
+        spots_total = get_spots_of_resort(resort_selected)
+        participants = get_participant_by_resort(resort_selected)
+
+        #Check if either last name, first name are empty, or age is 0
+        if len(fname) == 0 or len(lname) == 0 or age <= 0 or spots_total[0] <= len(participants):
+            #show warning to check for first name, last name, or age
+            showwarning("Error: Insufficient Information OR No Available Space", """\
+    One (or more) of these is causing a problem submitting the client's information:
+        1. First Name Entry is Empty
+        2. Last Name Entry is Empty
+        3. Age is set to 0
+        4. All the spots are filled up
+            """)
+        
+        #update and save the participant's details
+        else:
+            update_particpant_data(participant_details[0][0], first_name_info.get(), last_name_info.get(), meal_plan_info.get(), (event1_info.get() + event2_info.get() + event3_info.get()), age_value_info.get(), price_text_change(), resort_selection_info.get())
+            #refresh main screen
+            change_title_text(previous_resort)
 
     #change age info label
     def change_age_info_label(value):
