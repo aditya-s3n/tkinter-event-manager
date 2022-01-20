@@ -1,3 +1,4 @@
+from textwrap import fill
 from tkinter import * #tkinter package
 from tkinter.messagebox import * #warning & info message / pop-up
 import sqlite3
@@ -482,17 +483,24 @@ title_frame = Frame(root, bg="white")
 #Title Option Menu frame
 option_menu_frame = Frame(root)
 
+#Scrollbar for input data frame
+input_data_scrollbar = Scrollbar(input_data_frame)
+#Scrollbar for right terminal frame
+right_terminal_scrollbar = Scrollbar(right_terminal_frame)
+#Scrollbar for the listbox of participants
+particpants_listbox_scrollbar = Scrollbar(right_terminal_frame)
+
 #First Name Text Entry
 first_name = StringVar()
 first_name_entry = Entry(input_data_frame, textvariable=first_name)
 #First Name Label
-first_name_label = Label(input_data_frame, font=get_font_body(20), text="First Name: ")
+first_name_label = Label(input_data_frame, font=get_font_body(20), text="First Name: ", pady=10)
 
 #Last Name Text Entry
 last_name = StringVar()
 last_name_entry = Entry(input_data_frame, textvariable=last_name)
 #First Name Label
-last_name_label = Label(input_data_frame, font=get_font_body(20), text="Last Name: ")
+last_name_label = Label(input_data_frame, font=get_font_body(20), text="Last Name: ", pady=10)
 
 #Meal Plan Radio Buttons
 meal_plan = StringVar()
@@ -557,6 +565,7 @@ age_label_variable = StringVar()
 age_label = Label(input_data_frame, font=get_font_body(20), textvariable=age_label_variable)
 age_text_change(age_value.get())
 
+
 #set price to price labels
 price_text_change()
 change_title_text(resort_selection.get())
@@ -573,22 +582,22 @@ title_frame.grid(column=0, row=1, columnspan=2)
 option_menu_frame.grid(column=0, row=0, columnspan=2)
 
 #First Name Text Entry
-first_name_label.grid(column=0, row=3)
+first_name_label.grid(column=0, row=3, sticky=S)
 first_name_entry.grid(column=0, row=4)
 
 #Last Name Text Entry
-last_name_label.grid(column=0, row=5)
+last_name_label.grid(column=0, row=5, sticky=N)
 last_name_entry.grid(column=0, row=6)
 
 #Meal Plan Radio Buttons
-meal_plan_label.grid(column=0, row=7, ipadx = 10, ipady = 10) #label frame
+meal_plan_label.grid(column=0, row=7, ipadx = 10, ipady = 10, pady=20) #label frame
 meal_plan_deluxe.grid(sticky=W, padx=10)
 meal_plan_premium.grid(sticky=W, padx=10)
 meal_plan_business.grid(sticky=W, padx=10)
 meal_plan_economy.grid(sticky=W, padx=10)
 
 #Events Check Buttons
-event_label.grid(column=0, row=8, ipadx = 10, ipady = 10)
+event_label.grid(column=0, row=8, ipadx = 10, ipady = 10, pady=20)
 event1_check_button.grid(sticky=W, padx=10)
 event2_check_button.grid(sticky=W, padx=10)
 event3_check_button.grid(sticky=W, padx=10)
@@ -615,6 +624,9 @@ resort_option_menu.grid(row=0, column=0, columnspan=2, pady=10)
 #Title
 title_label.grid(column=0, row=1, pady=10, padx=20)
 open_spots_label.grid(column=0, row=2, pady=10)
+
+#Scrollbars
+particpants_listbox_scrollbar.grid(column=1, row=0)
 
 
 """---------------------------------- Run + Binds ----------------------------------"""
