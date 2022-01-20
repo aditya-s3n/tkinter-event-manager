@@ -267,7 +267,7 @@ One (or more) of these is causing a problem submitting the client's information:
     
     #Age Scale
     age_value_info = IntVar()
-    age_scale_info = Scale(info_window, from_=0, to=150, variable=age_value_info, width=20, length=100, command=change_age_info_label, orient=HORIZONTAL, font=get_font_body(10))
+    age_scale_info = Scale(info_window, from_=0, to=150, width=20, length=500, tickinterval=50, variable=age_value_info, command=change_age_info_label, orient=HORIZONTAL, font=get_font_body(10))
     #Age Label
     age_label_variable_info = StringVar()
     age_label_info = Label(info_window, font=get_font_body(20), textvariable=age_label_variable_info)
