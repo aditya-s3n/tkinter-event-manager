@@ -226,106 +226,114 @@ One (or more) of these is causing a problem submitting the client's information:
 
     """____Info Page Widgets____"""
     #window for new page
-    info_window = Toplevel(root)
+    info_window = Toplevel(root, bg="#A5A7A7")
     info_window.title("Himmapan Resort Participant") #set title of pop-up window
 
-    #title
-    title_info = Label(info_window, text="Participant")
+    #title frame
+    title_grid_info = Frame(info_window, bg="Black")
+    #Option Menu
+    resort_selection_info = StringVar()
+    resort_option_menu_info = OptionMenu(title_grid_info, resort_selection_info, *resorts)
+    resort_option_menu_info.config(font=get_font_title(35), bg="Black", fg="White")
+    resort_option_menu_info.config(bg="Black", fg="White")
 
+    #First name Grid
+    first_name_grid_info = Frame(info_window, bg="#A5A7A7")
     #First Name Text Entry
     first_name_info = StringVar()
-    first_name_entry_info = Entry(info_window, textvariable=first_name_info)
+    first_name_entry_info = Entry(first_name_grid_info, textvariable=first_name_info, width=30)
     #First Name Label
-    first_name_label_info = Label(info_window, font=get_font_body(20), text="First Name: ")
+    first_name_label_info = Label(first_name_entry_info, font=get_font_body(20), text="First Name: ", bg="#A5A7A7")
 
+    #Last Name Grid
+    last_name_grid_info = Frame(info_window, bg="#A5A7A7")
     #Last Name Text Entry
     last_name_info = StringVar()
-    last_name_entry_info = Entry(info_window, textvariable=last_name_info)
+    last_name_entry_info = Entry(last_name_grid_info, textvariable=last_name_info, width=30)
     #First Name Label
-    last_name_label_info = Label(info_window, font=get_font_body(20), text="Last Name: ")
+    last_name_label_info = Label(last_name_grid_info, font=get_font_body(20), text="Last Name: ", bg="#A5A7A7")
 
     #Meal Plan Radio Buttons
     meal_plan_info = StringVar()
     #Meal Plan Label Frame
-    meal_plan_label_info = LabelFrame(info_window, text="Choose a Meal Plan", font=get_font_body(20))
+    meal_plan_label_info = LabelFrame(info_window, text="Choose a Meal Plan", font=get_font_body(20), bg="#A5A7A7")
     #Radio Buttons
-    meal_plan_deluxe_info = Radiobutton(meal_plan_label_info, text="Deluxe", variable=meal_plan_info, value="Deluxe", command=price_text_change, font=get_font_body(15))
-    meal_plan_premium_info = Radiobutton(meal_plan_label_info, text="Premium", variable=meal_plan_info, value="Premium", command=price_text_change, font=get_font_body(15))
-    meal_plan_business_info = Radiobutton(meal_plan_label_info, text="Business", variable=meal_plan_info, value="Business", command=price_text_change, font=get_font_body(15))
-    meal_plan_economy_info = Radiobutton(meal_plan_label_info, text="Economy", variable=meal_plan_info, value="Economy", command=price_text_change, font=get_font_body(15))
+    meal_plan_deluxe_info = Radiobutton(meal_plan_label_info, text="Deluxe", variable=meal_plan_info, value="Deluxe", command=price_text_change, font=get_font_body(15), bg="#A5A7A7")
+    meal_plan_premium_info = Radiobutton(meal_plan_label_info, text="Premium", variable=meal_plan_info, value="Premium", command=price_text_change, font=get_font_body(15), bg="#A5A7A7")
+    meal_plan_business_info = Radiobutton(meal_plan_label_info, text="Business", variable=meal_plan_info, value="Business", command=price_text_change, font=get_font_body(15), bg="#A5A7A7")
+    meal_plan_economy_info = Radiobutton(meal_plan_label_info, text="Economy", variable=meal_plan_info, value="Economy", command=price_text_change, font=get_font_body(15), bg="#A5A7A7")
 
     #Events Check Buttons
     event1_info = DoubleVar()
     event2_info = DoubleVar()
     event3_info = DoubleVar()
     #Event Label Frame
-    event_label_info = LabelFrame(info_window, text="Choose What Event's to Apply To", font=get_font_body(20))
+    event_label_info = LabelFrame(info_window, text="Choose What Event's to Apply To", font=get_font_body(20), bg="#A5A7A7")
     #Check Buttons
-    event1_check_button_info = Checkbutton(event_label_info, variable=event1_info, text=events[0], onvalue=1, offvalue=0, font=get_font_body(15))
-    event2_check_button_info = Checkbutton(event_label_info, variable=event2_info, text=events[1], onvalue=1.1, offvalue=0, font=get_font_body(15))
-    event3_check_button_info = Checkbutton(event_label_info, variable=event3_info, text=events[2], onvalue=1.11, offvalue=0, font=get_font_body(15))
+    event1_check_button_info = Checkbutton(event_label_info, variable=event1_info, text=events[0], onvalue=1, offvalue=0, font=get_font_body(15), bg="#A5A7A7")
+    event2_check_button_info = Checkbutton(event_label_info, variable=event2_info, text=events[1], onvalue=1.1, offvalue=0, font=get_font_body(15), bg="#A5A7A7")
+    event3_check_button_info = Checkbutton(event_label_info, variable=event3_info, text=events[2], onvalue=1.11, offvalue=0, font=get_font_body(15), bg="#A5A7A7")
     
     #Age Scale
     age_value_info = IntVar()
-    age_scale_info = Scale(info_window, from_=0, to=150, width=20, length=500, tickinterval=50, variable=age_value_info, command=change_age_info_label, orient=HORIZONTAL, font=get_font_body(10))
+    age_scale_info = Scale(info_window, from_=0, to=150, width=20, length=500, tickinterval=50, variable=age_value_info, command=change_age_info_label, orient=HORIZONTAL, font=get_font_body(10), bg="#A5A7A7")
     #Age Label
     age_label_variable_info = StringVar()
-    age_label_info = Label(info_window, font=get_font_body(20), textvariable=age_label_variable_info)
+    age_label_info = Label(info_window, font=get_font_body(20), textvariable=age_label_variable_info, bg="#A5A7A7")
 
+    #Button Frame
+    button_frame_info = Frame(info_window, bg="#A5A7A7")
     #Save 
-    save_button_info = Button(info_window, text="Save", command=save_participant_detail)
-
+    save_button_info = Button(button_frame_info, text="Save", command=save_participant_detail, font=get_font_body(15), bg="Black", fg="White")
     #Delete
-    delete_button_info = Button(info_window, text="Delete", command=delete_profile)
+    delete_button_info = Button(button_frame_info, text="Delete", command=delete_profile, font=get_font_body(15), bg="Black", fg="White")
 
-    #Option Menu
-    resort_selection_info = StringVar()
-    resort_option_menu_info = OptionMenu(info_window, resort_selection_info, *resorts)
-    resort_option_menu_info.config(font=get_font_title(35))
-
-    #set all values
-    update_info_widgets()
 
 
     """____Grid Widgets____"""
     #Title
-    title_info.grid(column=0, row=0, columnspan=2)
+    title_grid_info.grid(column=0, row=0, pady=10)
+    #Resort Name Option Menu
+    resort_option_menu_info.grid(column=0, row=0)
 
     #First Name
-    first_name_label_info.grid(column=0, row=1)
-    first_name_entry_info.grid(column=1, row=1)
+    first_name_grid_info.grid(column=0, row=1, pady=10)
+    #first_name_label_info.grid(column=0, row=0)
+    first_name_entry_info.grid(column=1, row=0)
 
     #Last Name
-    last_name_label_info.grid(column=0, row=2)
-    last_name_entry_info.grid(column=1, row=2)
+    last_name_grid_info.grid(column=0, row=2, pady=10)
+    last_name_label_info.grid(column=0, row=0)
+    last_name_entry_info.grid(column=1, row=0)
 
     #Meal Plan Radio Buttons
-    meal_plan_label_info.grid(column=0, row=7, ipadx = 10, ipady = 10, columnspan=2) #label frame
+    meal_plan_label_info.grid(column=0, row=3, ipadx = 10, ipady = 10, pady=10) #label frame
     meal_plan_deluxe_info.grid(sticky=W, padx=10)
     meal_plan_premium_info.grid(sticky=W, padx=10)
     meal_plan_business_info.grid(sticky=W, padx=10)
     meal_plan_economy_info.grid(sticky=W, padx=10)
 
     #Events Check Buttons
-    event_label_info.grid(column=0, row=8, ipadx = 10, ipady = 10, columnspan=2)
+    event_label_info.grid(column=0, row=4, ipadx = 10, ipady = 10, padx=20, pady=10) #label frame
     event1_check_button_info.grid(sticky=W, padx=10)
     event2_check_button_info.grid(sticky=W, padx=10)
     event3_check_button_info.grid(sticky=W, padx=10)
 
     #Age Scale
-    age_label_info.grid(column=0, row=9, columnspan=2)
-    age_scale_info.grid(column=0, row=10, columnspan=2)
+    age_label_info.grid(column=0, row=5)
+    age_scale_info.grid(column=0, row=6, pady=10)
 
+    #Button Frame
+    button_frame_info.grid(column=0, row=7, pady=10)
     #Save Button
-    save_button_info.grid(column=0, row=11, sticky=W, columnspan=2)
-
+    save_button_info.grid(column=0, row=0, padx=25)
     #Delete Button
-    delete_button_info.grid(column=0, row=11, sticky=E, columnspan=2)
+    delete_button_info.grid(column=1, row=0, padx=25)
 
-    #Resort Name Option Menu
-    resort_option_menu_info.grid(row=0, column=0, columnspan=2)
 
     change_age_info_label(age_value_info.get())
+    #set all values
+    update_info_widgets()
     
 #change the title to react to the resort option menu
 def change_title_text(resort_name):
@@ -462,6 +470,7 @@ def get_spots_of_resort(resort_name: str) -> int:
 
 """---------------------------------- Tkinter Front-End ----------------------------------"""
 root = Tk()
+root.config(bg="Black") #change background to black
 root.title("Himmapan Resorts") #set the title of the main page
 events = ["Snorkling", "Massage", "Fireworks / Lightshow"]
 
@@ -476,13 +485,13 @@ def get_font_title(size: int):
 
 """____Make Widgets____"""
 #seperate grid for the input data
-input_data_frame = Frame(root)
+input_data_frame = Frame(root, bg="#A5A7A7")
 #seperate grid for the reading data / sumbit data
-right_terminal_frame = Frame(root)
+right_terminal_frame = Frame(root, bg="#4E4F4F")
 #create the title frame
 title_frame = Frame(root, bg="white")
 #Title Option Menu frame
-option_menu_frame = Frame(root)
+option_menu_frame = Frame(root, bg="Black")
 
 #Scrollbar for input data frame
 input_data_scrollbar = Scrollbar(input_data_frame)
@@ -491,47 +500,51 @@ right_terminal_scrollbar = Scrollbar(right_terminal_frame)
 #Scrollbar for the listbox of participants
 particpants_listbox_scrollbar = Scrollbar(right_terminal_frame)
 
+#First Name Grid
+first_name_grid = Frame(input_data_frame, bg="#A5A7A7")
 #First Name Text Entry
 first_name = StringVar()
-first_name_entry = Entry(input_data_frame, textvariable=first_name, width=50)
+first_name_entry = Entry(first_name_grid, textvariable=first_name, width=50)
 #First Name Label
-first_name_label = Label(input_data_frame, font=get_font_body(20), text="First Name: ", pady=10)
+first_name_label = Label(first_name_grid, font=get_font_body(20), text="First Name: ", pady=10, bg="#A5A7A7")
 
+#Last name grid
+last_name_grid = Frame(input_data_frame, bg="#A5A7A7")
 #Last Name Text Entry
 last_name = StringVar()
-last_name_entry = Entry(input_data_frame, textvariable=last_name, width=50)
+last_name_entry = Entry(last_name_grid, textvariable=last_name, width=50)
 #First Name Label
-last_name_label = Label(input_data_frame, font=get_font_body(20), text="Last Name: ", pady=10)
+last_name_label = Label(last_name_grid, font=get_font_body(20), text="Last Name: ", pady=10, bg="#A5A7A7")
 
 #Meal Plan Radio Buttons
 meal_plan = StringVar()
 meal_plan.set("Deluxe") #set the default radio button selection to deluxe
 #Meal Plan Label Frame
-meal_plan_label = LabelFrame(input_data_frame, text="Choose a Meal Plan", font=get_font_body(20))
+meal_plan_label = LabelFrame(input_data_frame, text="Choose a Meal Plan", font=get_font_body(20), bg="#A5A7A7")
 #Radio Buttons
-meal_plan_deluxe = Radiobutton(meal_plan_label, text="Deluxe", variable=meal_plan, value="Deluxe", command=price_text_change, font=get_font_body(15))
-meal_plan_premium = Radiobutton(meal_plan_label, text="Premium", variable=meal_plan, value="Premium", command=price_text_change, font=get_font_body(15))
-meal_plan_business = Radiobutton(meal_plan_label, text="Business", variable=meal_plan, value="Business", command=price_text_change, font=get_font_body(15))
-meal_plan_economy = Radiobutton(meal_plan_label, text="Economy", variable=meal_plan, value="Economy", command=price_text_change, font=get_font_body(15))
+meal_plan_deluxe = Radiobutton(meal_plan_label, text="Deluxe", variable=meal_plan, value="Deluxe", command=price_text_change, font=get_font_body(15), bg="#A5A7A7")
+meal_plan_premium = Radiobutton(meal_plan_label, text="Premium", variable=meal_plan, value="Premium", command=price_text_change, font=get_font_body(15), bg="#A5A7A7")
+meal_plan_business = Radiobutton(meal_plan_label, text="Business", variable=meal_plan, value="Business", command=price_text_change, font=get_font_body(15), bg="#A5A7A7")
+meal_plan_economy = Radiobutton(meal_plan_label, text="Economy", variable=meal_plan, value="Economy", command=price_text_change, font=get_font_body(15), bg="#A5A7A7")
 
 #Events Check Buttons
 event1 = DoubleVar()
 event2 = DoubleVar()
 event3 = DoubleVar()
 #Event Label Frame
-event_label = LabelFrame(input_data_frame, text="Choose What Event's to Apply To", font=get_font_body(20))
+event_label = LabelFrame(input_data_frame, text="Choose What Event's to Apply To", font=get_font_body(20), bg="#A5A7A7")
 #Check Buttons
-event1_check_button = Checkbutton(event_label, variable=event1, text=events[0], onvalue=1, offvalue=0, command=price_text_change, font=get_font_body(15))
-event2_check_button = Checkbutton(event_label, variable=event2, text=events[1], onvalue=1.1, offvalue=0, command=price_text_change, font=get_font_body(15))
-event3_check_button = Checkbutton(event_label, variable=event3, text=events[2], onvalue=1.11, offvalue=0, command=price_text_change, font=get_font_body(15))
+event1_check_button = Checkbutton(event_label, variable=event1, text=events[0], onvalue=1, offvalue=0, command=price_text_change, font=get_font_body(15), bg="#A5A7A7")
+event2_check_button = Checkbutton(event_label, variable=event2, text=events[1], onvalue=1.1, offvalue=0, command=price_text_change, font=get_font_body(15), bg="#A5A7A7")
+event3_check_button = Checkbutton(event_label, variable=event3, text=events[2], onvalue=1.11, offvalue=0, command=price_text_change, font=get_font_body(15), bg="#A5A7A7")
 
 #Price for Participant
 subtotal_variable = StringVar()
 tax_variable = StringVar()
 total_price_variable = StringVar()
-subtotal_label = Label(right_terminal_frame, textvariable=subtotal_variable, font=get_font_body(15))
-tax_label = Label(right_terminal_frame, textvariable=tax_variable, font=get_font_body(15))
-total_price_label = Label(right_terminal_frame, textvariable=total_price_variable, font=get_font_body(15))
+subtotal_label = Label(right_terminal_frame, textvariable=subtotal_variable, font=get_font_body(15), bg="#4E4F4F", fg="White")
+tax_label = Label(right_terminal_frame, textvariable=tax_variable, font=get_font_body(15), bg="#4E4F4F", fg="White")
+total_price_label = Label(right_terminal_frame, textvariable=total_price_variable, font=get_font_body(15), bg="#4E4F4F", fg="White")
 
 #Paricpants List Box
 list_box_array = ["Use", "this", "participant"]
@@ -539,10 +552,10 @@ list_box_variable = StringVar()
 list_box_variable.set(list_box_array)
 participant_listbox = Listbox(right_terminal_frame, listvariable=list_box_variable, selectmode=SINGLE, font=get_font_body(12))
 #Participant Label
-participant_label = Label(right_terminal_frame, text="Participants", font=get_font_body(20))
+participant_label = Label(right_terminal_frame, text="Participants", font=get_font_body(20), bg="#4E4F4F", fg="White")
 
 #Submit Button
-sumbit_button = Button(right_terminal_frame, text="Sumbit", command=add_paricipant, width=10, font=get_font_body(20), bg="Black", fg="White")
+sumbit_button = Button(right_terminal_frame, text="Submit", command=add_paricipant, width=10, font=get_font_body(20), bg="White", fg="Black")
 
 #Title
 title_variable = StringVar()
@@ -556,14 +569,16 @@ resorts = ["Hawaii", "Greece", "Chile", "Thailand"]
 resort_selection = StringVar()
 resort_selection.set("Hawaii")
 resort_option_menu = OptionMenu(option_menu_frame, resort_selection, *resorts, command=change_title_text)
-resort_option_menu.config(font=get_font_title(35))
+#change color of menu + font
+resort_option_menu.config(bg="Black", fg="White", font=get_font_title(35))
+resort_option_menu["menu"].config(bg="Black", fg="White")
 
 #Age Scale
 age_value = IntVar()
-age_scale = Scale(input_data_frame, from_=0, to=150, variable=age_value, width=20, length=500, tickinterval=50,command=age_text_change, orient=HORIZONTAL, font=get_font_body(10))
+age_scale = Scale(input_data_frame, from_=0, to=150, variable=age_value, width=20, length=500, tickinterval=50,command=age_text_change, orient=HORIZONTAL, font=get_font_body(10), bg="#A5A7A7")
 #Age Label
 age_label_variable = StringVar()
-age_label = Label(input_data_frame, font=get_font_body(20), textvariable=age_label_variable)
+age_label = Label(input_data_frame, font=get_font_body(20), textvariable=age_label_variable, bg="#A5A7A7")
 age_text_change(age_value.get())
 
 
@@ -574,42 +589,44 @@ change_title_text(resort_selection.get())
 
 """____Grid Widgets____"""
 #Input Data Frame
-input_data_frame.grid(column=0, row=2)
+input_data_frame.grid(column=0, row=2, sticky=NSEW)
 #Right Terminal Frame
-right_terminal_frame.grid(column=1, row=2, sticky=N)
+right_terminal_frame.grid(column=1, row=2, sticky=NSEW)
 #title frame
-title_frame.grid(column=0, row=1, columnspan=2)
+title_frame.grid(column=0, row=1, columnspan=2, sticky=NSEW)
 #Option Menu Title Frame
 option_menu_frame.grid(column=0, row=0, columnspan=2)
 
 #First Name Text Entry
-first_name_label.grid(column=0, row=3, sticky=S)
-first_name_entry.grid(column=0, row=4)
+first_name_grid.grid(column=0, row=3)
+first_name_label.grid(column=0, row=0, padx=10)
+first_name_entry.grid(column=1, row=0, padx=10)
 
 #Last Name Text Entry
-last_name_label.grid(column=0, row=5, sticky=N)
-last_name_entry.grid(column=0, row=6)
+last_name_grid.grid(column=0, row=4)
+last_name_label.grid(column=0, row=0, padx=10)
+last_name_entry.grid(column=1, row=0, padx=10)
 
 #Meal Plan Radio Buttons
-meal_plan_label.grid(column=0, row=7, ipadx = 10, ipady = 10) #label frame
+meal_plan_label.grid(column=0, row=5, ipadx = 10, ipady = 10) #label frame
 meal_plan_deluxe.grid(sticky=W, padx=10)
 meal_plan_premium.grid(sticky=W, padx=10)
 meal_plan_business.grid(sticky=W, padx=10)
 meal_plan_economy.grid(sticky=W, padx=10)
 
 #Events Check Buttons
-event_label.grid(column=0, row=8, ipadx = 10, ipady = 10)
+event_label.grid(column=0, row=6, ipadx = 10, ipady = 10, pady=10)
 event1_check_button.grid(sticky=W, padx=10)
 event2_check_button.grid(sticky=W, padx=10)
 event3_check_button.grid(sticky=W, padx=10)
 
 #Age Scale
-age_label.grid(column=0, row=9)
-age_scale.grid(column=0, row=10)
+age_label.grid(column=0, row=7, pady=5, sticky=S)
+age_scale.grid(column=0, row=8, pady=10, sticky=N)
 
 #Paricpants List Box
-participant_label.grid(column=1, row=0)
-participant_listbox.grid(column=1, row=1, pady=20, sticky=N)
+participant_label.grid(column=1, row=0, pady=10)
+participant_listbox.grid(column=1, row=1, pady=20, sticky=N, padx=25)
 
 #Submit Button
 sumbit_button.grid(column=1, row=5, pady=50)
