@@ -1,8 +1,7 @@
 from textwrap import fill
 from tkinter import * #tkinter package
 from tkinter.messagebox import * #warning & info message / pop-up
-import sqlite3
-from turtle import bgcolor #SQL database connection
+import sqlite3 #SQL database connection
 
 """---------------------------------- App Functionality ----------------------------------"""
 """____Commands + Tkinter Functions____"""
@@ -43,7 +42,7 @@ One (or more) of these is causing a problem submitting the client's information:
 
         #show a message asking if you wanna save this information
         result = askquestion("Save Data?", f"""\
-Do you wanna Save this Information at the {resort_selected} Resort:
+Do you wanna Save this Information at the {resort_selected} Resort (Subsidary of Himmapan Resorts):
     First Name: {fname}
     Last Name: {lname}
     Meal Plan: {meal_plan_selected}
@@ -228,6 +227,7 @@ One (or more) of these is causing a problem submitting the client's information:
     """____Info Page Widgets____"""
     #window for new page
     info_window = Toplevel(root)
+    info_window.title("Himmapan Resort Participant") #set title of pop-up window
 
     #title
     title_info = Label(info_window, text="Participant")
@@ -368,7 +368,7 @@ def enter_particpant(first_name: str, last_name: str, meal_plan: str, events: in
     end_connection_server(connect)
 
     #Show Successful message for User
-    showinfo("Successful Added Participant", f"The Participant {first_name} {last_name} has been successfully added to the database")
+    showinfo("Successful Added Participant", f"The Participant {first_name} {last_name} has been successfully added to the Himmapan Resort database")
     change_title_text(resort)
 
 #update a participants data in the SQL database
@@ -462,6 +462,7 @@ def get_spots_of_resort(resort_name: str) -> int:
 
 """---------------------------------- Tkinter Front-End ----------------------------------"""
 root = Tk()
+root.title("Himmapan Resorts") #set the title of the main page
 events = ["Snorkling", "Massage", "Fireworks / Lightshow"]
 
 #finction to get body font with custom size
@@ -492,13 +493,13 @@ particpants_listbox_scrollbar = Scrollbar(right_terminal_frame)
 
 #First Name Text Entry
 first_name = StringVar()
-first_name_entry = Entry(input_data_frame, textvariable=first_name)
+first_name_entry = Entry(input_data_frame, textvariable=first_name, width=50)
 #First Name Label
 first_name_label = Label(input_data_frame, font=get_font_body(20), text="First Name: ", pady=10)
 
 #Last Name Text Entry
 last_name = StringVar()
-last_name_entry = Entry(input_data_frame, textvariable=last_name)
+last_name_entry = Entry(input_data_frame, textvariable=last_name, width=50)
 #First Name Label
 last_name_label = Label(input_data_frame, font=get_font_body(20), text="Last Name: ", pady=10)
 
@@ -536,12 +537,12 @@ total_price_label = Label(right_terminal_frame, textvariable=total_price_variabl
 list_box_array = ["Use", "this", "participant"]
 list_box_variable = StringVar()
 list_box_variable.set(list_box_array)
-participant_listbox = Listbox(right_terminal_frame, listvariable=list_box_variable, selectmode=SINGLE)
+participant_listbox = Listbox(right_terminal_frame, listvariable=list_box_variable, selectmode=SINGLE, font=get_font_body(12))
 #Participant Label
 participant_label = Label(right_terminal_frame, text="Participants", font=get_font_body(20))
 
 #Submit Button
-sumbit_button = Button(right_terminal_frame, text="Sumbit", command=add_paricipant)
+sumbit_button = Button(right_terminal_frame, text="Sumbit", command=add_paricipant, width=10, font=get_font_body(20), bg="Black", fg="White")
 
 #Title
 title_variable = StringVar()
@@ -559,7 +560,7 @@ resort_option_menu.config(font=get_font_title(35))
 
 #Age Scale
 age_value = IntVar()
-age_scale = Scale(input_data_frame, from_=0, to=150, variable=age_value, width=20, length=100, command=age_text_change, orient=HORIZONTAL, font=get_font_body(10))
+age_scale = Scale(input_data_frame, from_=0, to=150, variable=age_value, width=20, length=500, tickinterval=50,command=age_text_change, orient=HORIZONTAL, font=get_font_body(10))
 #Age Label
 age_label_variable = StringVar()
 age_label = Label(input_data_frame, font=get_font_body(20), textvariable=age_label_variable)
@@ -590,14 +591,14 @@ last_name_label.grid(column=0, row=5, sticky=N)
 last_name_entry.grid(column=0, row=6)
 
 #Meal Plan Radio Buttons
-meal_plan_label.grid(column=0, row=7, ipadx = 10, ipady = 10, pady=20) #label frame
+meal_plan_label.grid(column=0, row=7, ipadx = 10, ipady = 10) #label frame
 meal_plan_deluxe.grid(sticky=W, padx=10)
 meal_plan_premium.grid(sticky=W, padx=10)
 meal_plan_business.grid(sticky=W, padx=10)
 meal_plan_economy.grid(sticky=W, padx=10)
 
 #Events Check Buttons
-event_label.grid(column=0, row=8, ipadx = 10, ipady = 10, pady=20)
+event_label.grid(column=0, row=8, ipadx = 10, ipady = 10)
 event1_check_button.grid(sticky=W, padx=10)
 event2_check_button.grid(sticky=W, padx=10)
 event3_check_button.grid(sticky=W, padx=10)
@@ -607,16 +608,16 @@ age_label.grid(column=0, row=9)
 age_scale.grid(column=0, row=10)
 
 #Paricpants List Box
-participant_label.grid(column=1, row=3)
-participant_listbox.grid(column=1, row=4)
+participant_label.grid(column=1, row=0)
+participant_listbox.grid(column=1, row=1, pady=20, sticky=N)
 
 #Submit Button
-sumbit_button.grid(column=1, row=8)
+sumbit_button.grid(column=1, row=5, pady=50)
 
 #Price for Participant
-subtotal_label.grid(column=1, row=5)
-tax_label.grid(column=1, row=6)
-total_price_label.grid(column=1, row=7)
+subtotal_label.grid(column=1, row=2, pady=10, sticky=S)
+tax_label.grid(column=1, row=3, sticky=N)
+total_price_label.grid(column=1, row=4, pady=10)
 
 #Resort Name Option Menu
 resort_option_menu.grid(row=0, column=0, columnspan=2, pady=10)
@@ -624,9 +625,6 @@ resort_option_menu.grid(row=0, column=0, columnspan=2, pady=10)
 #Title
 title_label.grid(column=0, row=1, pady=10, padx=20)
 open_spots_label.grid(column=0, row=2, pady=10)
-
-#Scrollbars
-particpants_listbox_scrollbar.grid(column=1, row=0)
 
 
 """---------------------------------- Run + Binds ----------------------------------"""
