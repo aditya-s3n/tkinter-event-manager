@@ -236,6 +236,7 @@ One (or more) of these is causing a problem submitting the client's information:
     resort_option_menu_info = OptionMenu(title_grid_info, resort_selection_info, *resorts)
     resort_option_menu_info.config(font=get_font_title(35), bg="Black", fg="White")
     resort_option_menu_info.config(bg="Black", fg="White")
+    resort_option_menu_info["menu"].config(bg="Black", fg="White")
 
     #First name Grid
     first_name_grid_info = Frame(info_window, bg="#A5A7A7")
@@ -243,7 +244,7 @@ One (or more) of these is causing a problem submitting the client's information:
     first_name_info = StringVar()
     first_name_entry_info = Entry(first_name_grid_info, textvariable=first_name_info, width=30)
     #First Name Label
-    first_name_label_info = Label(first_name_entry_info, font=get_font_body(20), text="First Name: ", bg="#A5A7A7")
+    first_name_label_info = Label(first_name_grid_info, font=get_font_body(20), text="First Name: ", bg="#A5A7A7")
 
     #Last Name Grid
     last_name_grid_info = Frame(info_window, bg="#A5A7A7")
@@ -292,13 +293,13 @@ One (or more) of these is causing a problem submitting the client's information:
 
     """____Grid Widgets____"""
     #Title
-    title_grid_info.grid(column=0, row=0, pady=10)
+    title_grid_info.grid(column=0, row=0, sticky=NSEW)
     #Resort Name Option Menu
-    resort_option_menu_info.grid(column=0, row=0)
+    resort_option_menu_info.pack(fill="x")
 
     #First Name
     first_name_grid_info.grid(column=0, row=1, pady=10)
-    #first_name_label_info.grid(column=0, row=0)
+    first_name_label_info.grid(column=0, row=0)
     first_name_entry_info.grid(column=1, row=0)
 
     #Last Name
@@ -532,7 +533,7 @@ event1 = DoubleVar()
 event2 = DoubleVar()
 event3 = DoubleVar()
 #Event Label Frame
-event_label = LabelFrame(input_data_frame, text="Choose What Event's to Apply To", font=get_font_body(20), bg="#A5A7A7")
+event_label = LabelFrame(input_data_frame, text="Choose What Events to Apply To", font=get_font_body(20), bg="#A5A7A7")
 #Check Buttons
 event1_check_button = Checkbutton(event_label, variable=event1, text=events[0], onvalue=1, offvalue=0, command=price_text_change, font=get_font_body(15), bg="#A5A7A7")
 event2_check_button = Checkbutton(event_label, variable=event2, text=events[1], onvalue=1.1, offvalue=0, command=price_text_change, font=get_font_body(15), bg="#A5A7A7")
