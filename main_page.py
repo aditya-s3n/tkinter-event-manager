@@ -488,12 +488,11 @@ def get_font_title(size: int):
 #Input Data Container
 input_data_container = Frame(root)
 #Scrollbar Canvas
-input_data_canvas = Canvas(input_data_container)
+input_data_canvas = Canvas(input_data_container, bg="#A5A7A7")
 #Scrollbar Input Data 
-input_data_scrollbar = Scrollbar(input_data_container)
-
+input_data_scrollbar_Y = Scrollbar(input_data_container, orient=VERTICAL, command=input_data_canvas.yview)
 #seperate grid for the input data
-input_data_frame = Frame(root, bg="#A5A7A7")
+input_data_frame = Frame(input_data_canvas, bg="#A5A7A7")
 #seperate grid for the reading data / sumbit data
 right_terminal_frame = Frame(root, bg="#4E4F4F")
 #create the title frame
@@ -591,6 +590,9 @@ age_label = Label(input_data_frame, font=get_font_body(20), textvariable=age_lab
 age_text_change(age_value.get())
 
 
+#Create Scrollable Canvas
+input_data_canvas.configure(yscrollcommand=input_data_scrollbar_Y.set)
+
 #set price to price labels
 price_text_change()
 change_title_text(resort_selection.get())
@@ -598,9 +600,17 @@ change_title_text(resort_selection.get())
 
 """____Grid Widgets____"""
 #Input Data Container
-input_data_frame.grid(column=0, row=2, sticky=NSEW)
+input_data_container.grid(column=0, row=2, sticky=NSEW)
+#Input data Canvas
+input_data_canvas.pack(side="left", fill=BOTH, expand=True, ipadx=85)
 #Input Data Scrollbar
+input_data_scrollbar_Y.pack(side="right", fill=BOTH)
 #Input Data Frame
+input_data_canvas.create_window((0, 0), window=input_data_frame)
+
+
+
+
 #Right Terminal Frame
 right_terminal_frame.grid(column=1, row=2, sticky=NSEW)
 #title frame
@@ -620,21 +630,21 @@ last_name_label.grid(column=0, row=0, padx=10)
 last_name_entry.grid(column=1, row=0, padx=10)
 
 #Meal Plan Radio Buttons
-meal_plan_label.grid(column=0, row=5, ipadx = 10, ipady = 10) #label frame
+meal_plan_label.grid(column=0, row=5, ipadx = 10, ipady = 10, pady=20) #label frame
 meal_plan_deluxe.grid(sticky=W, padx=10)
 meal_plan_premium.grid(sticky=W, padx=10)
 meal_plan_business.grid(sticky=W, padx=10)
 meal_plan_economy.grid(sticky=W, padx=10)
 
 #Events Check Buttons
-event_label.grid(column=0, row=6, ipadx = 10, ipady = 10, pady=10)
+event_label.grid(column=0, row=6, ipadx = 10, ipady = 10, pady=20) #label frame
 event1_check_button.grid(sticky=W, padx=10)
 event2_check_button.grid(sticky=W, padx=10)
 event3_check_button.grid(sticky=W, padx=10)
 
 #Age Scale
 age_label.grid(column=0, row=7, pady=5, sticky=S)
-age_scale.grid(column=0, row=8, pady=10, sticky=N)
+age_scale.grid(column=0, row=8, pady=25, sticky=N)
 
 #Paricpants List Box
 participant_label.grid(column=1, row=0, pady=10)
@@ -661,5 +671,12 @@ open_spots_label.grid(column=0, row=2, pady=10)
 """---------------------------------- Run + Binds ----------------------------------"""
 #listbox
 participant_listbox.bind("<Double-Button>", open_participant)
+
+#Input Scroll box
+input_data_frame.bind("<Configure>",
+    lambda scroll: input_data_canvas.configure(
+        scrollregion=input_data_canvas.bbox("all")
+    )
+)
 
 root.mainloop()
