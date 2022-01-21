@@ -494,12 +494,6 @@ title_frame = Frame(root, bg="white")
 #Title Option Menu frame
 option_menu_frame = Frame(root, bg="Black")
 
-#Scrollbar for input data frame
-input_data_scrollbar = Scrollbar(input_data_frame)
-#Scrollbar for right terminal frame
-right_terminal_scrollbar = Scrollbar(right_terminal_frame)
-#Scrollbar for the listbox of participants
-particpants_listbox_scrollbar = Scrollbar(right_terminal_frame)
 
 #First Name Grid
 first_name_grid = Frame(input_data_frame, bg="#A5A7A7")
@@ -547,13 +541,20 @@ subtotal_label = Label(right_terminal_frame, textvariable=subtotal_variable, fon
 tax_label = Label(right_terminal_frame, textvariable=tax_variable, font=get_font_body(15), bg="#4E4F4F", fg="White")
 total_price_label = Label(right_terminal_frame, textvariable=total_price_variable, font=get_font_body(15), bg="#4E4F4F", fg="White")
 
+#List box frame
+participant_listbox_frame = Frame(right_terminal_frame)
+#Scrollbar for the listbox of participants
+particpants_listbox_scrollbar = Scrollbar(participant_listbox_frame)
 #Paricpants List Box
 list_box_array = ["Use", "this", "participant"]
 list_box_variable = StringVar()
 list_box_variable.set(list_box_array)
-participant_listbox = Listbox(right_terminal_frame, listvariable=list_box_variable, selectmode=SINGLE, font=get_font_body(12))
+participant_listbox = Listbox(participant_listbox_frame, listvariable=list_box_variable, selectmode=SINGLE, font=get_font_body(12))
 #Participant Label
 participant_label = Label(right_terminal_frame, text="Participants", font=get_font_body(20), bg="#4E4F4F", fg="White")
+#Config for listbox and scrollbar
+participant_listbox.config(yscrollcommand=particpants_listbox_scrollbar.set)
+particpants_listbox_scrollbar.config(command=participant_listbox.yview)
 
 #Submit Button
 sumbit_button = Button(right_terminal_frame, text="Submit", command=add_paricipant, width=10, font=get_font_body(20), bg="White", fg="Black")
@@ -627,7 +628,9 @@ age_scale.grid(column=0, row=8, pady=10, sticky=N)
 
 #Paricpants List Box
 participant_label.grid(column=1, row=0, pady=10)
-participant_listbox.grid(column=1, row=1, pady=20, sticky=N, padx=25)
+participant_listbox_frame.grid(column=1, row=1, pady=20, sticky=N, padx=25)
+participant_listbox.pack(side="left", fill=BOTH) #list box
+particpants_listbox_scrollbar.pack(side="right", fill=BOTH) #scroll bar for list box
 
 #Submit Button
 sumbit_button.grid(column=1, row=5, pady=50)
