@@ -128,7 +128,7 @@ def update_list_box(resort_name: str):
         new_participant = f"{user[0]} {user[1]} {user[2]}"
         list_box_array.append(new_participant)
 
-    #set the list to the list box variable
+    #set the list to the list box variable UPDATES
     list_box_variable.set(list_box_array) 
 
 def open_participant(value):
@@ -485,6 +485,13 @@ def get_font_title(size: int):
 
 
 """____Make Widgets____"""
+#Input Data Container
+input_data_container = Frame(root)
+#Scrollbar Canvas
+input_data_canvas = Canvas(input_data_container)
+#Scrollbar Input Data 
+input_data_scrollbar = Scrollbar(input_data_container)
+
 #seperate grid for the input data
 input_data_frame = Frame(root, bg="#A5A7A7")
 #seperate grid for the reading data / sumbit data
@@ -590,8 +597,10 @@ change_title_text(resort_selection.get())
 
 
 """____Grid Widgets____"""
-#Input Data Frame
+#Input Data Container
 input_data_frame.grid(column=0, row=2, sticky=NSEW)
+#Input Data Scrollbar
+#Input Data Frame
 #Right Terminal Frame
 right_terminal_frame.grid(column=1, row=2, sticky=NSEW)
 #title frame
@@ -599,8 +608,7 @@ title_frame.grid(column=0, row=1, columnspan=2, sticky=NSEW)
 #Option Menu Title Frame
 option_menu_frame.grid(column=0, row=0, columnspan=2)
 
-#test 2
-#test
+
 #First Name Text Entry
 first_name_grid.grid(column=0, row=3)
 first_name_label.grid(column=0, row=0, padx=10)
