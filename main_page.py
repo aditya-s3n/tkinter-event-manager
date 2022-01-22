@@ -606,7 +606,7 @@ input_data_canvas.pack(side="left", fill=BOTH, expand=True, ipadx=85)
 #Input Data Scrollbar
 input_data_scrollbar_Y.pack(side="right", fill=BOTH)
 #Input Data Frame
-input_data_canvas.create_window((0, 0), window=input_data_frame)
+input_data_canvas.create_window((0, 0), window=input_data_frame, anchor=NW)
 
 
 
