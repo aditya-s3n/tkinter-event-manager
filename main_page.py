@@ -1,4 +1,3 @@
-from textwrap import fill
 from tkinter import * #tkinter package
 from tkinter.messagebox import * #warning & info message / pop-up
 import sqlite3 #SQL database connection
@@ -51,14 +50,15 @@ Do you wanna Save this Information at the {resort_selected} Resort (Subsidary of
     Price: ${total_price_formatted}
             """)
         
+        #see's if the user inputed yes into the ask question message box
         if result == "yes":
             #enter into SQL database
             enter_particpant(fname, lname, meal_plan_selected, events_selected, age, total_price, resort_selected)
 
 #change age label
 def age_text_change(value):
-    age_label_variable.set(f"Age: {value}")
-    price_text_change()
+    age_label_variable.set(f"Age: {value}") #change text for age label
+    price_text_change() #change the price text
 
 #change price label
 def price_text_change():
@@ -114,7 +114,7 @@ def price_text_change():
     #set tax price label
     total_price_variable.set(f"TOTAL: ${total_price_formatted}")
 
-    return total_price
+    return total_price #return the total price to use
 
 #update the list box with all the pariticpants
 def update_list_box(resort_name: str):
@@ -131,6 +131,8 @@ def update_list_box(resort_name: str):
     #set the list to the list box variable UPDATES
     list_box_variable.set(list_box_array) 
 
+
+#Open the participant's data in a new window
 def open_participant(value):
     """____Info Page Functionaility____"""
     #get the index / component user is on
@@ -221,12 +223,12 @@ One (or more) of these is causing a problem submitting the client's information:
 
     #change age info label
     def change_age_info_label(value):
-        age_label_variable_info.set(f"Age: {value}")
+        age_label_variable_info.set(f"Age: {value}") #change the age label
 
 
     """____Info Page Widgets____"""
     #window for new page
-    info_window = Toplevel(root, bg="#A5A7A7")
+    info_window = Toplevel(root, bg="#A5A7A7") #create the new window
     info_window.title("Himmapan Resort Participant") #set title of pop-up window
 
     #title frame
@@ -332,6 +334,7 @@ One (or more) of these is causing a problem submitting the client's information:
     delete_button_info.grid(column=1, row=0, padx=25)
 
 
+    #set the age label text
     change_age_info_label(age_value_info.get())
     #set all values
     update_info_widgets()
@@ -343,11 +346,13 @@ def change_title_text(resort_name):
     price_text_change()
     update_list_box(resort_name)
 
+#set / change the open spots label to the amount the resort has
 def change_spots_label(resort_name):
-    spots_total = get_spots_of_resort(resort_name)
-    participants = get_participant_by_resort(resort_name)
+    spots_total = get_spots_of_resort(resort_name) #get the total number of spots open for resort
+    participants = get_participant_by_resort(resort_name) #get the total amount of participants for resort
 
-    open_spots_variable.set(f"There are {spots_total[0] - len(participants)} spots open")
+    #calculate difference of total to filled, and set the value of label
+    open_spots_variable.set(f"There are {spots_total[0] - len(participants)} spots open") 
 
 
 """____Database____"""
@@ -473,7 +478,7 @@ def get_spots_of_resort(resort_name: str) -> int:
 root = Tk()
 root.config(bg="Black") #change background to black
 root.title("Himmapan Resorts") #set the title of the main page
-events = ["Snorkling", "Massage", "Fireworks / Lightshow"]
+events = ["Snorkling", "Massage", "Fireworks / Lightshow"] #the events avaliable for the app
 
 #finction to get body font with custom size
 def get_font_body(size: int):
@@ -609,8 +614,6 @@ input_data_scrollbar_Y.pack(side="right", fill=BOTH)
 input_data_canvas.create_window((0, 0), window=input_data_frame, anchor=NW)
 
 
-
-
 #Right Terminal Frame
 right_terminal_frame.grid(column=1, row=2, sticky=NSEW)
 #title frame
@@ -668,15 +671,19 @@ title_label.grid(column=0, row=1, pady=10, padx=20)
 open_spots_label.grid(column=0, row=2, pady=10)
 
 
+
 """---------------------------------- Run + Binds ----------------------------------"""
 #listbox
-participant_listbox.bind("<Double-Button>", open_participant)
+participant_listbox.bind("<Double-Button>", open_participant) #double click of user's list to open participant data
 
 #Input Scroll box
+#used to calucalute what to show for the input frame scroll bar
 input_data_frame.bind("<Configure>",
+    #lamba holds 2 functions to run
     lambda scroll: input_data_canvas.configure(
-        scrollregion=input_data_canvas.bbox("all")
+        scrollregion=input_data_canvas.bbox("all") #scrolls down the frame in the canvas
     )
 )
 
+#run the main loop for the tkinter app
 root.mainloop()
